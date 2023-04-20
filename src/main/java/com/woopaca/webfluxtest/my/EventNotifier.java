@@ -1,4 +1,4 @@
-package com.woopaca.webfluxtest;
+package com.woopaca.webfluxtest.my;
 
 import org.springframework.stereotype.Component;
 
@@ -22,8 +22,12 @@ public class EventNotifier {
     }
 
     public String getNewEvent() {
-        change = false;
+        System.out.println("EventNotifier.getNewEvent");
         int newEventIndex = events.size() - 1;
         return events.get(newEventIndex);
+    }
+
+    public void setChange(boolean change) {
+        this.change = change;
     }
 }

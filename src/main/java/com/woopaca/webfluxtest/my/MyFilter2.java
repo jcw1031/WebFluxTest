@@ -1,4 +1,4 @@
-package com.woopaca.webfluxtest;
+package com.woopaca.webfluxtest.my;
 
 import lombok.RequiredArgsConstructor;
 

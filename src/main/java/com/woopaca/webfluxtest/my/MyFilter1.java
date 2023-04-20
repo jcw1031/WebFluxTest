@@ -1,4 +1,4 @@
-package com.woopaca.webfluxtest;
+package com.woopaca.webfluxtest.my;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -23,10 +23,7 @@ public class MyFilter1 implements Filter {
             throws IOException, ServletException {
         System.out.println("필터 실행됨");
 
-        /**
-         * Flux
-         * -------------------------------------
-         */
+        // 1. Reactive Streams 라이브러리를 사용하면 표준을 지켜 응답할 수 있다.
         HttpServletResponse servletResponse = (HttpServletResponse) response;
 //        servletResponse.setContentType(MediaType.TEXT_PLAIN_VALUE);
         servletResponse.setContentType(MediaType.TEXT_EVENT_STREAM_VALUE);
@@ -42,20 +39,23 @@ public class MyFilter1 implements Filter {
                 e.printStackTrace();
             }
         }
-        /**
-         * -------------------------------------
-         */
 
+        // 2. SSE Emitter 라이브러리를 사용하면 편하게 구현할 수 있다.
         while (true) {
             try {
                 if (eventNotifier.isChange()) {
-                    writer.println("응답: " + eventNotifier.getNewEvent());
+                    String newEvent = eventNotifier.getNewEvent();
+                    writer.println("응답: " + newEvent);
                     writer.flush();
+                    eventNotifier.setChange(false);
                 }
-                Thread.sleep(100);
+                Thread.sleep(1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+
+        // 3. WebFlux -> Reactive Streams가 적용된 stream을 배운다. (비동기 단일 스레드 동작)
+        // 4. Servlet MVC -> (멀티 스레드 방식)
     }
 }
